@@ -115,7 +115,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
           {t("basicInfo")}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Field label={`${t("employeeNumber")} *`} error={errors.employeeNumber?.message}>
             <Input {...register("employeeNumber")} placeholder="EMP-001" disabled={disabled} />
           </Field>
@@ -130,7 +130,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
           {t("employmentInfo")}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Field label={t("hireDate")}>
             <Input type="date" {...register("hireDate")} disabled={disabled} />
           </Field>
@@ -170,7 +170,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
           {t("personalInfo")}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Field label={t("gender")}>
             <Select
               value={watch("gender") ?? "__none__"}
@@ -209,7 +209,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
           {t("emergencyContact")}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Field label={t("emergencyContactName")}>
             <Input {...register("emergencyContactName")} disabled={disabled} />
           </Field>

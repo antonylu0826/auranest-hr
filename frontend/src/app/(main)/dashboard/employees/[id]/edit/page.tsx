@@ -31,7 +31,7 @@ export default function EditEmployeePage({ params }: { params: Promise<{ id: str
   });
 
   return (
-    <div className="p-6 max-w-5xl space-y-6">
+    <div className="p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">{t("editEmployee")}</h1>
         {data && (
