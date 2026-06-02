@@ -8,7 +8,8 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Pencil, Plus } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -34,8 +35,6 @@ import {
 import { useTranslations } from "@/i18n/provider";
 import { useDebounce } from "@/hooks/use-debounce";
 import { employeesApi, type Employee, type EmploymentStatus } from "@/lib/employees-api";
-import { CreateEmployeeSheet } from "./_components/create-employee-sheet";
-import { EditEmployeeSheet } from "./_components/edit-employee-sheet";
 import { DeleteEmployeeDialog } from "./_components/delete-employee-dialog";
 
 const PAGE_SIZE = 20;
@@ -171,7 +170,11 @@ export default function EmployeesPage() {
         enableSorting: false,
         cell: ({ row }) => (
           <div className="flex items-center justify-end gap-1">
-            <EditEmployeeSheet employeeId={row.original.id} />
+            <Button size="sm" variant="ghost" asChild>
+              <Link href={`/dashboard/employees/${row.original.id}/edit`}>
+                <Pencil className="size-4" />
+              </Link>
+            </Button>
             <DeleteEmployeeDialog
               employeeId={row.original.id}
               employeeName={row.original.name}
@@ -222,7 +225,12 @@ export default function EmployeesPage() {
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             className="h-9 w-60"
           />
-          <CreateEmployeeSheet />
+          <Button size="sm" asChild>
+            <Link href="/dashboard/employees/new">
+              <Plus className="mr-1.5 size-4" />
+              {t("newEmployee")}
+            </Link>
+          </Button>
         </div>
       </div>
 

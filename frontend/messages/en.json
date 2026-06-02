@@ -46,7 +46,9 @@
   "pages": {
     "dashboard": "Home",
     "employees": "Employees",
-    "users": "Users"
+    "users": "Users",
+    "new": "New",
+    "edit": "Edit"
   },
   "employees": {
     "title": "Employees",

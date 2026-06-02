@@ -46,7 +46,9 @@
   "pages": {
     "dashboard": "首頁",
     "employees": "員工管理",
-    "users": "使用者"
+    "users": "使用者",
+    "new": "新增",
+    "edit": "編輯"
   },
   "employees": {
     "title": "員工管理",
