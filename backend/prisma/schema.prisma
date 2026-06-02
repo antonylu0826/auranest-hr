@@ -32,6 +32,13 @@ enum EmploymentStatus {
   ON_LEAVE
 }
 
+enum OrgUnitLevel {
+  COMPANY
+  DIVISION
+  DEPARTMENT
+  TEAM
+}
+
 // Used only in local auth mode — ignored in OIDC mode
 model User {
   id              String           @id @default(cuid())
@@ -47,12 +54,32 @@ model User {
   @@map("users")
 }
 
+model OrgUnit {
+  id        String       @id @default(cuid())
+  name      String
+  level     OrgUnitLevel
+  headId    String?      @map("head_id")
+  parentId  String?      @map("parent_id")
+  head      EmployeeProfile?  @relation("OrgUnitHead", fields: [headId], references: [id], onDelete: SetNull)
+  parent    OrgUnit?     @relation("OrgUnitTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children  OrgUnit[]    @relation("OrgUnitTree")
+  employees EmployeeProfile[] @relation("OrgUnitMembers")
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  @@index([parentId])
+  @@map("org_units")
+}
+
 model EmployeeProfile {
   id                    String           @id @default(cuid())
   employeeNumber        String           @unique @map("employee_number")
   name                  String
   userId                String?          @unique @map("user_id")
   user                  User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  orgUnitId             String?          @map("org_unit_id")
+  orgUnit               OrgUnit?         @relation("OrgUnitMembers", fields: [orgUnitId], references: [id], onDelete: SetNull)
+  ledOrgUnits           OrgUnit[]        @relation("OrgUnitHead")
   nationalId            String?          @map("national_id")
   gender                Gender?
   birthDate             DateTime?        @map("birth_date") @db.Date
@@ -69,5 +96,6 @@ model EmployeeProfile {
 
   @@index([employeeNumber])
   @@index([employmentStatus])
+  @@index([orgUnitId])
   @@map("employee_profiles")
 }

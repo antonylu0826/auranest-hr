@@ -35,6 +35,7 @@
     "home": "Home",
     "hr": "Human Resources",
     "employees": "Employees",
+    "orgUnits": "Org Units",
     "admin": "Admin",
     "users": "Users"
   },
@@ -46,6 +47,7 @@
   "pages": {
     "dashboard": "Home",
     "employees": "Employees",
+    "orgUnits": "Org Units",
     "users": "Users",
     "new": "New",
     "edit": "Edit"
@@ -100,6 +102,30 @@
       "RESIGNED": "Resigned",
       "TERMINATED": "Terminated",
       "ON_LEAVE": "On leave"
+    }
+  },
+  "orgUnits": {
+    "title": "Org Units",
+    "newOrgUnit": "New unit",
+    "createOrgUnit": "Create org unit",
+    "editOrgUnit": "Edit org unit",
+    "deleteOrgUnit": "Delete org unit",
+    "deleteConfirm": "This cannot be undone. Remove all child units and members before deleting.",
+    "searchPlaceholder": "Search by name…",
+    "noOrgUnits": "No org units found.",
+    "name": "Name",
+    "level": "Level",
+    "parent": "Parent",
+    "head": "Head",
+    "members": "Members",
+    "children": "Sub-units",
+    "tableView": "List",
+    "treeView": "Org chart",
+    "levels": {
+      "COMPANY": "Company",
+      "DIVISION": "Division",
+      "DEPARTMENT": "Department",
+      "TEAM": "Team"
     }
   },
   "users": {

@@ -15,6 +15,7 @@ const SELECT = {
   employeeNumber: true,
   name: true,
   userId: true,
+  orgUnitId: true,
   nationalId: true,
   gender: true,
   birthDate: true,
@@ -40,6 +41,7 @@ function mapRow(row: {
   employeeNumber: string;
   name: string;
   userId: string | null;
+  orgUnitId: string | null;
   nationalId: string | null;
   gender: string | null;
   birthDate: Date | null;
@@ -118,6 +120,7 @@ export class EmployeesService {
         employeeNumber: input.employeeNumber,
         name: input.name,
         userId: input.userId ?? null,
+        orgUnitId: input.orgUnitId ?? null,
         nationalId: input.nationalId ?? null,
         gender: input.gender ?? null,
         birthDate: input.birthDate ? new Date(input.birthDate) : null,
@@ -165,6 +168,7 @@ export class EmployeesService {
         ...(input.employeeNumber !== undefined && { employeeNumber: input.employeeNumber }),
         ...(input.name !== undefined && { name: input.name }),
         ...('userId' in input && { userId: input.userId ?? null }),
+        ...('orgUnitId' in input && { orgUnitId: input.orgUnitId ?? null }),
         ...(input.nationalId !== undefined && { nationalId: input.nationalId }),
         ...(input.gender !== undefined && { gender: input.gender ?? null }),
         ...(input.birthDate !== undefined && {

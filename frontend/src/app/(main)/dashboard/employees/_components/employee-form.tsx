@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "@/i18n/provider";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Employee, CreateEmployeeData } from "@/lib/employees-api";
+import { orgUnitsApi } from "@/lib/org-units-api";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -33,6 +35,7 @@ const schema = z.object({
   hireDate: z.string().regex(DATE_RE).nullable().optional(),
   employmentType: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "INTERN"]).optional(),
   employmentStatus: z.enum(["ACTIVE", "RESIGNED", "TERMINATED", "ON_LEAVE"]).optional(),
+  orgUnitId: z.string().nullable().optional(),
 });
 
 export type EmployeeFormValues = z.infer<typeof schema>;
@@ -70,6 +73,12 @@ function Field({
 
 export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Props) {
   const t = useTranslations("employees");
+  const tOrg = useTranslations("orgUnits");
+
+  const { data: orgUnits } = useQuery({
+    queryKey: ["org-units", "list-all"],
+    queryFn: () => orgUnitsApi.list({ limit: 100 }),
+  });
 
   const {
     register,
@@ -105,6 +114,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         hireDate: defaultValues.hireDate ?? undefined,
         employmentType: defaultValues.employmentType,
         employmentStatus: defaultValues.employmentStatus,
+        orgUnitId: defaultValues.orgUnitId ?? null,
       });
     }
   }, [defaultValues, reset]);
@@ -164,6 +174,21 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
               <SelectContent>
                 {STATUSES.map((v) => (
                   <SelectItem key={v} value={v}>{t(`employmentStatuses.${v}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label={tOrg("title")}>
+            <Select
+              value={watch("orgUnitId") ?? "__none__"}
+              onValueChange={(v) => setValue("orgUnitId", v === "__none__" ? null : v)}
+              disabled={disabled}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">—</SelectItem>
+                {(orgUnits?.data ?? []).map((u) => (
+                  <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

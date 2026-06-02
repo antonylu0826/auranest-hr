@@ -35,6 +35,7 @@
     "home": "首頁",
     "hr": "人力資源",
     "employees": "員工管理",
+    "orgUnits": "組織部門",
     "admin": "管理",
     "users": "使用者"
   },
@@ -46,6 +47,7 @@
   "pages": {
     "dashboard": "首頁",
     "employees": "員工管理",
+    "orgUnits": "組織部門",
     "users": "使用者",
     "new": "新增",
     "edit": "編輯"
@@ -100,6 +102,36 @@
       "RESIGNED": "離職",
       "TERMINATED": "終止",
       "ON_LEAVE": "留職停薪"
+    }
+  },
+  "orgUnits": {
+    "title": "組織部門",
+    "newOrgUnit": "新增部門",
+    "createOrgUnit": "建立部門",
+    "editOrgUnit": "編輯部門",
+    "deleteOrgUnit": "刪除部門",
+    "deleteConfirm": "這個操作無法復原。請先移除子部門與成員後再刪除。",
+    "searchPlaceholder": "搜尋部門名稱…",
+    "noOrgUnits": "找不到部門資料。",
+    "name": "部門名稱",
+    "level": "層級",
+    "parent": "上層部門",
+    "head": "主管",
+    "members": "人數",
+    "children": "子部門",
+    "tableView": "列表",
+    "treeView": "組織圖",
+    "levels": {
+      "COMPANY": "公司",
+      "DIVISION": "事業群",
+      "DEPARTMENT": "部門",
+      "TEAM": "小組"
+    },
+    "levelColors": {
+      "COMPANY": "default",
+      "DIVISION": "secondary",
+      "DEPARTMENT": "outline",
+      "TEAM": "outline"
     }
   },
   "users": {

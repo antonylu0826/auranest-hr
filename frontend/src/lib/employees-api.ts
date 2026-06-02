@@ -11,6 +11,7 @@ export interface Employee {
   userId: string | null;
   userName: string | null;
   userEmail: string | null;
+  orgUnitId: string | null;
   nationalId: string | null;
   gender: Gender | null;
   birthDate: string | null;
@@ -30,6 +31,7 @@ export interface CreateEmployeeData {
   employeeNumber: string;
   name: string;
   userId?: string | null;
+  orgUnitId?: string | null;
   nationalId?: string | null;
   gender?: Gender | null;
   birthDate?: string | null;
