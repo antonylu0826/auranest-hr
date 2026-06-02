@@ -50,14 +50,16 @@ const STATUSES = ["ACTIVE", "RESIGNED", "TERMINATED", "ON_LEAVE"] as const;
 function Field({
   label,
   error,
+  className,
   children,
 }: {
   label: string;
   error?: string;
+  className?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className={`space-y-1.5 ${className ?? ""}`}>
       <Label className="text-sm font-medium">{label}</Label>
       {children}
       {error && <p className="text-xs text-destructive">{error}</p>}
@@ -196,10 +198,10 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
           <Field label={t("phone")}>
             <Input {...register("phone")} disabled={disabled} />
           </Field>
+          <Field label={t("address")} className="col-span-full">
+            <Input {...register("address")} disabled={disabled} />
+          </Field>
         </div>
-        <Field label={t("address")}>
-          <Input {...register("address")} disabled={disabled} />
-        </Field>
       </section>
 
       {/* 緊急聯絡人 */}
