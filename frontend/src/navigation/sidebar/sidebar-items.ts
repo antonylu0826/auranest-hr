@@ -1,4 +1,4 @@
-import { type LucideIcon, Home, Users } from "lucide-react";
+import { type LucideIcon, Home, Users, UserCheck } from "lucide-react";
 
 export interface NavSubItem {
   title: string;
@@ -40,6 +40,17 @@ export const sidebarItems: NavGroup[] = [
   },
   {
     id: 2,
+    label: "hr",
+    items: [
+      {
+        title: "employees",
+        url: "/dashboard/employees",
+        icon: UserCheck,
+      },
+    ],
+  },
+  {
+    id: 3,
     label: "admin",
     adminOnly: true,
     items: [

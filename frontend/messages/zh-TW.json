@@ -33,6 +33,8 @@
   },
   "sidebar": {
     "home": "首頁",
+    "hr": "人力資源",
+    "employees": "員工管理",
     "admin": "管理",
     "users": "使用者"
   },
@@ -43,7 +45,60 @@
   },
   "pages": {
     "dashboard": "首頁",
+    "employees": "員工管理",
     "users": "使用者"
+  },
+  "employees": {
+    "title": "員工管理",
+    "newEmployee": "新增員工",
+    "searchPlaceholder": "搜尋姓名、員工編號或電話…",
+    "noEmployees": "找不到員工資料。",
+    "employeeNumber": "員工編號",
+    "name": "姓名",
+    "gender": "性別",
+    "hireDate": "到職日",
+    "employmentType": "雇用類型",
+    "employmentStatus": "在職狀態",
+    "phone": "電話",
+    "linkedAccount": "系統帳號",
+    "createEmployee": "建立員工",
+    "editEmployee": "編輯員工",
+    "deleteEmployee": "刪除員工",
+    "deleteConfirm": "這個操作無法復原，員工資料將被永久刪除。",
+    "basicInfo": "基本資料",
+    "employmentInfo": "職務資訊",
+    "personalInfo": "個人資料",
+    "emergencyContact": "緊急聯絡人",
+    "nationalId": "身分證號",
+    "birthDate": "出生日期",
+    "nationality": "國籍",
+    "address": "地址",
+    "emergencyContactName": "緊急聯絡人姓名",
+    "emergencyContactPhone": "緊急聯絡人電話",
+    "genders": {
+      "MALE": "男",
+      "FEMALE": "女",
+      "OTHER": "其他"
+    },
+    "employmentTypes": {
+      "FULL_TIME": "全職",
+      "PART_TIME": "兼職",
+      "CONTRACT": "約聘",
+      "INTERN": "實習"
+    },
+    "employmentStatuses": {
+      "ACTIVE": "在職",
+      "RESIGNED": "離職",
+      "TERMINATED": "終止",
+      "ON_LEAVE": "留職停薪"
+    },
+    "statusFilter": {
+      "all": "全部狀態",
+      "ACTIVE": "在職",
+      "RESIGNED": "離職",
+      "TERMINATED": "終止",
+      "ON_LEAVE": "留職停薪"
+    }
   },
   "users": {
     "title": "使用者",

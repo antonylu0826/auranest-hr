@@ -12,16 +12,62 @@ enum UserRole {
   USER
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+}
+
+enum EmploymentStatus {
+  ACTIVE
+  RESIGNED
+  TERMINATED
+  ON_LEAVE
+}
+
 // Used only in local auth mode — ignored in OIDC mode
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      UserRole @default(USER)
-  isActive  Boolean  @default(true) @map("is_active")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id              String           @id @default(cuid())
+  email           String           @unique
+  password        String
+  name            String?
+  role            UserRole         @default(USER)
+  isActive        Boolean          @default(true) @map("is_active")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  employeeProfile EmployeeProfile?
 
   @@map("users")
+}
+
+model EmployeeProfile {
+  id                    String           @id @default(cuid())
+  employeeNumber        String           @unique @map("employee_number")
+  name                  String
+  userId                String?          @unique @map("user_id")
+  user                  User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  nationalId            String?          @map("national_id")
+  gender                Gender?
+  birthDate             DateTime?        @map("birth_date") @db.Date
+  nationality           String?          @default("TW")
+  phone                 String?
+  address               String?
+  emergencyContactName  String?          @map("emergency_contact_name")
+  emergencyContactPhone String?          @map("emergency_contact_phone")
+  hireDate              DateTime?        @map("hire_date") @db.Date
+  employmentType        EmploymentType   @default(FULL_TIME) @map("employment_type")
+  employmentStatus      EmploymentStatus @default(ACTIVE) @map("employment_status")
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+
+  @@index([employeeNumber])
+  @@index([employmentStatus])
+  @@map("employee_profiles")
 }
