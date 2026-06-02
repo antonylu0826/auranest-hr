@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "@/i18n/provider";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -132,7 +133,12 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Field label={t("hireDate")}>
-            <Input type="date" {...register("hireDate")} disabled={disabled} />
+            <DatePicker
+              value={watch("hireDate") ?? undefined}
+              onChange={(v) => setValue("hireDate", v ?? null)}
+              placeholder={t("hireDate")}
+              disabled={disabled}
+            />
           </Field>
           <Field label={t("employmentType")}>
             <Select
@@ -187,7 +193,12 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
             </Select>
           </Field>
           <Field label={t("birthDate")}>
-            <Input type="date" {...register("birthDate")} disabled={disabled} />
+            <DatePicker
+              value={watch("birthDate") ?? undefined}
+              onChange={(v) => setValue("birthDate", v ?? null)}
+              placeholder={t("birthDate")}
+              disabled={disabled}
+            />
           </Field>
           <Field label={t("nationalId")}>
             <Input {...register("nationalId")} disabled={disabled} />
