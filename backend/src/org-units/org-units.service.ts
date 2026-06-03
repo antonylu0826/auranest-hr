@@ -24,7 +24,7 @@ export class OrgUnitsService {
 
   async findAll(query: PaginationQuery) {
     const { skip, take } = toPrismaPage(query);
-    const orderBy = toPrismaOrderBy(query, SORTABLE, { level: 'asc', name: 'asc' });
+    const orderBy = toPrismaOrderBy(query, SORTABLE, { name: 'asc' });
     const where = query.search
       ? { name: { contains: query.search, mode: 'insensitive' as const } }
       : undefined;
