@@ -13,6 +13,7 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AppSelect } from "@/components/ui/app-select";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslations } from "@/i18n/provider";
 import {
@@ -43,6 +44,7 @@ interface Props {
 
 export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
   const [open, setOpen] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const t = useTranslations("employeeDependents");
   const tc = useTranslations("common");
   const qc = useQueryClient();
@@ -50,7 +52,6 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
   const { data: employeesResult } = useQuery({
     queryKey: ["employees-all"],
     queryFn: () => employeesApi.list({ limit: 100 }),
-    enabled: open,
   });
   const employees = employeesResult?.data ?? [];
 
@@ -87,6 +88,7 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
         phone: fresh.phone,
         isActive: fresh.isActive,
       });
+      setInitialized(true);
     } else if (!open) {
       reset({
         employeeId: defaultEmployeeId ?? "",
@@ -98,6 +100,7 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
         phone: null,
         isActive: true,
       });
+      setInitialized(false);
     }
   }, [fresh, open, reset, defaultEmployeeId]);
 
@@ -115,6 +118,10 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
   });
 
   const birthDateValue = watch("birthDate");
+  const employeeOptions = employees.map((e) => ({
+    value: e.id,
+    label: `${e.employeeNumber} — ${e.name}`,
+  }));
 
   return (
     <>
@@ -135,7 +142,7 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
           </DialogHeader>
 
           <form id="dependent-form" onSubmit={handleSubmit((v) => mutation.mutate(v))} className="space-y-4 py-2">
-            {isLoading ? (
+            {(isLoading || !employeesResult || (mode === "edit" && !initialized)) ? (
               <p className="text-sm text-muted-foreground">{tc("loading")}</p>
             ) : (
               <>
@@ -145,18 +152,13 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
                     control={control}
                     name="employeeId"
                     render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange} disabled={mutation.isPending}>
-                        <SelectTrigger>
-                          <SelectValue placeholder={t("employeeFilter")} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {employees.map((e) => (
-                            <SelectItem key={e.id} value={e.id}>
-                              {e.employeeNumber} — {e.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <AppSelect
+                        value={field.value || null}
+                        onValueChange={(v) => field.onChange(v ?? "")}
+                        options={employeeOptions}
+                        placeholder={t("employeeFilter")}
+                        disabled={mutation.isPending}
+                      />
                     )}
                   />
                   {errors.employeeId && <p className="text-xs text-destructive">{errors.employeeId.message}</p>}

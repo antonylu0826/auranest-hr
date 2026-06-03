@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "@/i18n/provider";
+import { AppSelect } from "@/components/ui/app-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -50,27 +50,29 @@ export function OrgUnitForm({ formId, defaultValues, editId, onSubmit, disabled 
 
   const { data: allEmployees } = useQuery({
     queryKey: ["employees", "list-all"],
-    queryFn: () => employeesApi.list({ limit: 200, status: "ACTIVE" }),
+    queryFn: () => employeesApi.list({ limit: 100, status: "ACTIVE" }),
   });
 
-  const parentOptions = (allUnits?.data ?? []).filter((u) => u.id !== editId);
-  const headOptions = allEmployees?.data ?? [];
+  const parentOptions = (allUnits?.data ?? [])
+    .filter((u) => u.id !== editId)
+    .map((u) => ({ value: u.id, label: u.name }));
 
-  const { register, handleSubmit, setValue, watch, reset } = useForm<OrgUnitFormValues>({
+  const headOptions = (allEmployees?.data ?? []).map((e) => ({
+    value: e.id,
+    label: `${e.employeeNumber} — ${e.name}`,
+  }));
+
+  const { register, handleSubmit, setValue, watch } = useForm<OrgUnitFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", level: "DEPARTMENT" },
+    defaultValues: defaultValues
+      ? {
+          name: defaultValues.name,
+          level: defaultValues.level,
+          parentId: defaultValues.parentId,
+          headId: defaultValues.headId,
+        }
+      : { name: "", level: "DEPARTMENT" },
   });
-
-  useEffect(() => {
-    if (defaultValues) {
-      reset({
-        name: defaultValues.name,
-        level: defaultValues.level,
-        parentId: defaultValues.parentId,
-        headId: defaultValues.headId,
-      });
-    }
-  }, [defaultValues, reset]);
 
   return (
     <form id={formId} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -95,35 +97,23 @@ export function OrgUnitForm({ formId, defaultValues, editId, onSubmit, disabled 
         </Field>
 
         <Field label={t("parent")}>
-          <Select
-            value={watch("parentId") ?? "__none__"}
-            onValueChange={(v) => setValue("parentId", v === "__none__" ? null : v)}
+          <AppSelect
+            value={watch("parentId") ?? null}
+            onValueChange={(v) => setValue("parentId", v)}
+            options={parentOptions}
+            nullable
             disabled={disabled}
-          >
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="__none__">—</SelectItem>
-              {parentOptions.map((u) => (
-                <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          />
         </Field>
 
         <Field label={t("head")}>
-          <Select
-            value={watch("headId") ?? "__none__"}
-            onValueChange={(v) => setValue("headId", v === "__none__" ? null : v)}
+          <AppSelect
+            value={watch("headId") ?? null}
+            onValueChange={(v) => setValue("headId", v)}
+            options={headOptions}
+            nullable
             disabled={disabled}
-          >
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="__none__">—</SelectItem>
-              {headOptions.map((e) => (
-                <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          />
         </Field>
       </div>
     </form>
