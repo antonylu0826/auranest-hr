@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Pencil, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,8 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
+const EMPTY: FormValues = { name: "", code: "", department: null, grade: null, isActive: true };
+
 interface Props {
   mode: "create" | "edit";
   jobTitle?: JobTitle;
@@ -35,31 +37,26 @@ export function JobTitleDialog({ mode, jobTitle }: Props) {
   const tc = useTranslations("common");
   const qc = useQueryClient();
 
-  const { data: fresh, isLoading } = useQuery({
-    queryKey: ["job-title", jobTitle?.id],
-    queryFn: () => jobTitlesApi.get(jobTitle!.id),
-    enabled: open && mode === "edit" && !!jobTitle,
-  });
-
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } =
     useForm<FormValues>({
       resolver: zodResolver(schema),
-      defaultValues: { name: "", code: "", isActive: true },
+      defaultValues: EMPTY,
     });
 
-  useEffect(() => {
-    if (fresh) {
+  function handleOpenChange(o: boolean) {
+    setOpen(o);
+    if (o && mode === "edit" && jobTitle) {
       reset({
-        name: fresh.name,
-        code: fresh.code,
-        department: fresh.department,
-        grade: fresh.grade,
-        isActive: fresh.isActive,
+        name: jobTitle.name,
+        code: jobTitle.code,
+        department: jobTitle.department,
+        grade: jobTitle.grade,
+        isActive: jobTitle.isActive,
       });
-    } else if (!open) {
-      reset({ name: "", code: "", department: null, grade: null, isActive: true });
+    } else if (!o) {
+      reset(EMPTY);
     }
-  }, [fresh, open, reset]);
+  }
 
   const mutation = useMutation({
     mutationFn: (data: CreateJobTitleData) =>
@@ -86,53 +83,47 @@ export function JobTitleDialog({ mode, jobTitle }: Props) {
         </Button>
       )}
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{mode === "create" ? t("createJobTitle") : t("editJobTitle")}</DialogTitle>
           </DialogHeader>
 
           <form id="job-title-form" onSubmit={handleSubmit((v) => mutation.mutate(v))} className="space-y-4 py-2">
-            {isLoading ? (
-              <p className="text-sm text-muted-foreground">{tc("loading")}</p>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <Label>{t("name")} *</Label>
-                    <Input {...register("name")} placeholder="Senior Engineer" disabled={mutation.isPending} />
-                    {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>{t("code")} *</Label>
-                    <Input {...register("code")} placeholder="SE" className="uppercase" disabled={mutation.isPending} />
-                    {errors.code && <p className="text-xs text-destructive">{errors.code.message}</p>}
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>{t("department")}</Label>
-                    <Input {...register("department")} placeholder="Engineering" disabled={mutation.isPending} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>{t("grade")}</Label>
-                    <Input {...register("grade")} placeholder="L5" disabled={mutation.isPending} />
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="isActive"
-                    checked={watch("isActive")}
-                    onCheckedChange={(v) => setValue("isActive", v === true)}
-                    disabled={mutation.isPending}
-                  />
-                  <Label htmlFor="isActive" className="cursor-pointer">{t("isActive")}</Label>
-                </div>
-              </>
-            )}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label>{t("name")} *</Label>
+                <Input {...register("name")} placeholder="Senior Engineer" disabled={mutation.isPending} />
+                {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+              </div>
+              <div className="space-y-1.5">
+                <Label>{t("code")} *</Label>
+                <Input {...register("code")} placeholder="SE" className="uppercase" disabled={mutation.isPending} />
+                {errors.code && <p className="text-xs text-destructive">{errors.code.message}</p>}
+              </div>
+              <div className="space-y-1.5">
+                <Label>{t("department")}</Label>
+                <Input {...register("department")} placeholder="Engineering" disabled={mutation.isPending} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>{t("grade")}</Label>
+                <Input {...register("grade")} placeholder="L5" disabled={mutation.isPending} />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="isActive"
+                checked={watch("isActive")}
+                onCheckedChange={(v) => setValue("isActive", v === true)}
+                disabled={mutation.isPending}
+              />
+              <Label htmlFor="isActive" className="cursor-pointer">{t("isActive")}</Label>
+            </div>
           </form>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)} disabled={mutation.isPending}>{tc("cancel")}</Button>
-            <Button type="submit" form="job-title-form" disabled={mutation.isPending || isLoading}>
+            <Button type="submit" form="job-title-form" disabled={mutation.isPending}>
               {mutation.isPending ? (mode === "create" ? tc("creating") : tc("saving")) : (mode === "create" ? tc("create") : tc("save"))}
             </Button>
           </DialogFooter>

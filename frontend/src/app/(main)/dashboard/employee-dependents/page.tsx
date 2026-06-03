@@ -14,10 +14,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AppSelect } from "@/components/ui/app-select";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useTranslations } from "@/i18n/provider";
 import { useDebounce } from "@/hooks/use-debounce";
 import { employeeDependentsApi, type EmployeeDependent } from "@/lib/employee-dependents-api";
@@ -25,50 +25,26 @@ import { employeesApi } from "@/lib/employees-api";
 import { DependentDialog } from "./_components/dependent-dialog";
 import { DeleteDependentDialog } from "./_components/delete-dependent-dialog";
 
-function TableSkeleton({ cols }: { cols: number }) {
-  return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {Array.from({ length: cols }).map((_, i) => (
-              <TableHead key={i}><Skeleton className="h-4 w-20" /></TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <TableRow key={i}>
-              {Array.from({ length: cols }).map((_, j) => (
-                <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
-}
-
 export default function EmployeeDependentsPage() {
   const t = useTranslations("employeeDependents");
+  const tc = useTranslations("common");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [search, setSearch] = useState("");
-  const [employeeFilter, setEmployeeFilter] = useState<string>("all");
+  const [employeeFilter, setEmployeeFilter] = useState<string | null>(null);
   const debouncedSearch = useDebounce(search, 300);
 
   const sortField = sorting[0]?.id;
   const sortOrder = sorting[0] ? (sorting[0].desc ? "DESC" : "ASC") : undefined;
 
   const { data: result, isLoading } = useQuery({
-    queryKey: ["employee-dependents", debouncedSearch, sortField, sortOrder, employeeFilter],
+    queryKey: ["employee-dependents", debouncedSearch, sortField, sortOrder, employeeFilter ?? "all"],
     queryFn: () =>
       employeeDependentsApi.list({
         search: debouncedSearch || undefined,
         sortField,
         sortOrder,
         limit: 100,
-        employeeId: employeeFilter !== "all" ? employeeFilter : undefined,
+        employeeId: employeeFilter ?? undefined,
       }),
   });
 
@@ -141,7 +117,7 @@ export default function EmployeeDependentsPage() {
         enableSorting: false,
         cell: ({ row }) => (
           <Badge variant={row.original.isActive ? "default" : "secondary"}>
-            {row.original.isActive ? "啟用" : "停用"}
+            {row.original.isActive ? tc("active") : tc("disabled")}
           </Badge>
         ),
       },
@@ -177,26 +153,21 @@ export default function EmployeeDependentsPage() {
           <p className="text-muted-foreground text-sm">{result?.total ?? 0} 筆</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Select value={employeeFilter} onValueChange={setEmployeeFilter}>
-            <SelectTrigger className="h-9 w-48">
-              <SelectValue placeholder={t("allEmployees")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("allEmployees")}</SelectItem>
-              {employees.map((e) => (
-                <SelectItem key={e.id} value={e.id}>
-                  {e.employeeNumber} — {e.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <AppSelect
+            value={employeeFilter}
+            onValueChange={setEmployeeFilter}
+            options={employees.map((e) => ({ value: e.id, label: `${e.employeeNumber} — ${e.name}` }))}
+            placeholder={t("allEmployees")}
+            nullable
+            className="h-9 w-48"
+          />
           <Input
             placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="h-9 w-60"
           />
-          <DependentDialog mode="create" defaultEmployeeId={employeeFilter !== "all" ? employeeFilter : undefined} />
+          <DependentDialog mode="create" defaultEmployeeId={employeeFilter ?? undefined} />
         </div>
       </div>
 

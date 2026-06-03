@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useTranslations } from "@/i18n/provider";
 import { useDebounce } from "@/hooks/use-debounce";
 import { orgUnitsApi, type OrgUnit, type OrgUnitLevel } from "@/lib/org-units-api";
@@ -26,23 +27,6 @@ const LEVEL_VARIANT: Record<OrgUnitLevel, "default" | "secondary" | "outline"> =
   DEPARTMENT: "outline",
   TEAM: "outline",
 };
-
-function TableSkeleton({ cols }: { cols: number }) {
-  return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow>{Array.from({ length: cols }).map((_, i) => <TableHead key={i}><Skeleton className="h-4 w-20" /></TableHead>)}</TableRow>
-        </TableHeader>
-        <TableBody>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <TableRow key={i}>{Array.from({ length: cols }).map((_, j) => <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>)}</TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
-}
 
 type View = "table" | "tree";
 

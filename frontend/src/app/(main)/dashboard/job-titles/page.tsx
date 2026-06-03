@@ -8,27 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useTranslations } from "@/i18n/provider";
 import { useDebounce } from "@/hooks/use-debounce";
 import { jobTitlesApi, type JobTitle } from "@/lib/job-titles-api";
 import { JobTitleDialog } from "./_components/job-title-dialog";
 import { DeleteJobTitleDialog } from "./_components/delete-job-title-dialog";
 
-function TableSkeleton({ cols }: { cols: number }) {
-  return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader><TableRow>{Array.from({ length: cols }).map((_, i) => <TableHead key={i}><Skeleton className="h-4 w-20" /></TableHead>)}</TableRow></TableHeader>
-        <TableBody>{Array.from({ length: 5 }).map((_, i) => <TableRow key={i}>{Array.from({ length: cols }).map((_, j) => <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>)}</TableRow>)}</TableBody>
-      </Table>
-    </div>
-  );
-}
-
 export default function JobTitlesPage() {
   const t = useTranslations("jobTitles");
+  const tc = useTranslations("common");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
@@ -85,7 +75,7 @@ export default function JobTitlesPage() {
       enableSorting: false,
       cell: ({ row }) => (
         <Badge variant={row.original.isActive ? "default" : "secondary"}>
-          {row.original.isActive ? "啟用" : "停用"}
+          {row.original.isActive ? tc("active") : tc("disabled")}
         </Badge>
       ),
     },

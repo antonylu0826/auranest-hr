@@ -24,11 +24,13 @@ import {
 } from "@/lib/employee-dependents-api";
 import { employeesApi } from "@/lib/employees-api";
 
+const GENDERS = ["MALE", "FEMALE", "OTHER"] as const;
+
 const schema = z.object({
   employeeId: z.string().min(1, "必填"),
   name: z.string().min(1, "必填"),
   relationship: z.enum(DEPENDENT_RELATIONSHIPS),
-  gender: z.enum(["MALE", "FEMALE", "OTHER"]).nullable().optional(),
+  gender: z.enum(GENDERS).nullable().optional(),
   birthDate: z.string().nullable().optional(),
   nationalId: z.string().nullable().optional(),
   phone: z.string().nullable().optional(),
@@ -52,6 +54,7 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
   const { data: employeesResult } = useQuery({
     queryKey: ["employees-all"],
     queryFn: () => employeesApi.list({ limit: 100 }),
+    enabled: open,
   });
   const employees = employeesResult?.data ?? [];
 
@@ -61,19 +64,21 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
     enabled: open && mode === "edit" && !!dependent,
   });
 
+  const emptyValues: FormValues = {
+    employeeId: defaultEmployeeId ?? "",
+    name: "",
+    relationship: "SPOUSE",
+    gender: null,
+    birthDate: null,
+    nationalId: null,
+    phone: null,
+    isActive: true,
+  };
+
   const { control, register, handleSubmit, watch, setValue, reset, formState: { errors } } =
     useForm<FormValues>({
       resolver: zodResolver(schema),
-      defaultValues: {
-        employeeId: defaultEmployeeId ?? "",
-        name: "",
-        relationship: "SPOUSE",
-        gender: null,
-        birthDate: null,
-        nationalId: null,
-        phone: null,
-        isActive: true,
-      },
+      defaultValues: emptyValues,
     });
 
   useEffect(() => {
@@ -90,19 +95,10 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
       });
       setInitialized(true);
     } else if (!open) {
-      reset({
-        employeeId: defaultEmployeeId ?? "",
-        name: "",
-        relationship: "SPOUSE",
-        gender: null,
-        birthDate: null,
-        nationalId: null,
-        phone: null,
-        isActive: true,
-      });
+      reset({ ...emptyValues, employeeId: defaultEmployeeId ?? "" });
       setInitialized(false);
     }
-  }, [fresh, open, reset, defaultEmployeeId]);
+  }, [fresh, open, reset, defaultEmployeeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mutation = useMutation({
     mutationFn: (data: CreateEmployeeDependentData) =>
@@ -117,7 +113,6 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const birthDateValue = watch("birthDate");
   const employeeOptions = employees.map((e) => ({
     value: e.id,
     label: `${e.employeeNumber} — ${e.name}`,
@@ -202,7 +197,7 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
                             <SelectValue placeholder="—" />
                           </SelectTrigger>
                           <SelectContent>
-                            {(["MALE", "FEMALE", "OTHER"] as const).map((g) => (
+                            {GENDERS.map((g) => (
                               <SelectItem key={g} value={g}>{t(`genders.${g}`)}</SelectItem>
                             ))}
                           </SelectContent>
@@ -214,7 +209,7 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
                   <div className="space-y-1.5">
                     <Label>{t("birthDate")}</Label>
                     <DatePicker
-                      value={birthDateValue ?? undefined}
+                      value={watch("birthDate") ?? undefined}
                       onChange={(d) => setValue("birthDate", d ?? null)}
                       disabled={mutation.isPending}
                     />

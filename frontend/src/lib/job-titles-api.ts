@@ -1,4 +1,4 @@
-import { apiFetch, type PaginatedResult, type ListQuery } from "./api";
+import { apiFetch, toQueryString, type PaginatedResult, type ListQuery } from "./api";
 
 export interface JobTitle {
   id: string;
@@ -21,18 +21,9 @@ export interface CreateJobTitleData {
 
 export type UpdateJobTitleData = Partial<CreateJobTitleData>;
 
-function toQs(params: Record<string, unknown>): string {
-  const q = new URLSearchParams();
-  for (const [k, v] of Object.entries(params)) {
-    if (v !== undefined && v !== "") q.set(k, String(v));
-  }
-  const s = q.toString();
-  return s ? `?${s}` : "";
-}
-
 export const jobTitlesApi = {
   list: (query?: ListQuery) =>
-    apiFetch<PaginatedResult<JobTitle>>(`/job-titles${toQs({ ...query })}`),
+    apiFetch<PaginatedResult<JobTitle>>(`/job-titles${toQueryString({ ...query })}`),
   get: (id: string) => apiFetch<JobTitle>(`/job-titles/${id}`),
   create: (data: CreateJobTitleData) =>
     apiFetch<JobTitle>("/job-titles", { method: "POST", body: JSON.stringify(data) }),

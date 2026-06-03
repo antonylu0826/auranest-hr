@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   paginate,
@@ -25,20 +26,9 @@ const SELECT = {
   employee: { select: { id: true, name: true, employeeNumber: true } },
 } as const;
 
-function mapRow(row: {
-  id: string;
-  employeeId: string;
-  name: string;
-  relationship: string;
-  gender: string | null;
-  birthDate: Date | null;
-  nationalId: string | null;
-  phone: string | null;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  employee: { id: string; name: string; employeeNumber: string };
-}) {
+type DependentRow = Prisma.EmployeeDependentGetPayload<{ select: typeof SELECT }>;
+
+function mapRow(row: DependentRow) {
   return {
     ...row,
     birthDate: row.birthDate ? row.birthDate.toISOString().slice(0, 10) : null,
