@@ -37,6 +37,7 @@
     "employees": "員工管理",
     "orgUnits": "組織部門",
     "shiftTypes": "班別設定",
+    "jobTitles": "職稱管理",
     "admin": "管理",
     "users": "使用者"
   },
@@ -52,6 +53,8 @@
     "org-units": "組織部門",
     "shiftTypes": "班別設定",
     "shift-types": "班別設定",
+    "jobTitles": "職稱管理",
+    "job-titles": "職稱管理",
     "users": "使用者",
     "new": "新增",
     "edit": "編輯"
@@ -107,6 +110,21 @@
       "TERMINATED": "終止",
       "ON_LEAVE": "留職停薪"
     }
+  },
+  "jobTitles": {
+    "title": "職稱管理",
+    "newJobTitle": "新增職稱",
+    "createJobTitle": "建立職稱",
+    "editJobTitle": "編輯職稱",
+    "deleteJobTitle": "刪除職稱",
+    "deleteConfirm": "這個操作無法復原。請先移除員工的職稱指派後再刪除。",
+    "searchPlaceholder": "搜尋職稱名稱、代碼或部門…",
+    "noJobTitles": "找不到職稱資料。",
+    "name": "職稱名稱",
+    "code": "代碼",
+    "department": "所屬部門/功能",
+    "grade": "職等",
+    "isActive": "啟用"
   },
   "shiftTypes": {
     "title": "班別設定",

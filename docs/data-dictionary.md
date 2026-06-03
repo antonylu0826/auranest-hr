@@ -70,6 +70,23 @@
 
 ## Models
 
+### JobTitle
+
+> Job title / position classification within the organisation. Assigned to employees to identify their role level and function.
+
+**DB table:** `job_titles`
+
+| Field | Type | Required | Unique | Description |
+|-------|------|----------|--------|-------------|
+| `id` | String | ✓ | ✓ |  |
+| `name` | String | ✓ | ✓ | Display name, e.g. "Senior Software Engineer". Must be unique. |
+| `code` | String | ✓ | ✓ | Short code for reporting, e.g. "SSE". Must be unique. |
+| `department` | String |  |  | Functional department this title belongs to, e.g. "Engineering". |
+| `grade` | String |  |  | Compensation grade / band, e.g. "L5". Used for salary banding. |
+| `isActive` | Boolean | ✓ |  | Inactive titles are hidden from new assignments but retained for history. |
+| `createdAt` | DateTime | ✓ |  |  |
+| `updatedAt` | DateTime | ✓ |  |  |
+
 ### User
 
 > System user account. Used for authentication in local-auth mode. Linked 1-to-1 with EmployeeProfile via userId (optional — an employee may exist before an account is created).
@@ -142,6 +159,7 @@
 | `name` | String | ✓ |  | Full legal name. |
 | `userId` | String |  | ✓ | Linked system account. Null until IT creates and links a User account. |
 | `orgUnitId` | String |  |  | Assigned organisational unit. Null if unassigned. |
+| `jobTitleId` | String |  |  | Assigned job title. Identifies employee's role level and function. |
 | `shiftTypeId` | String |  |  | Assigned shift template. Determines daily work schedule. |
 | `nationalId` | String |  |  | Government-issued national identification number. |
 | `gender` | Gender |  |  |  |

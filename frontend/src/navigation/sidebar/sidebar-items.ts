@@ -1,4 +1,4 @@
-import { type LucideIcon, Home, Users, UserCheck, Network, Clock } from "lucide-react";
+import { type LucideIcon, Home, Users, UserCheck, Network, Clock, BadgeCheck } from "lucide-react";
 
 export interface NavSubItem {
   title: string;
@@ -56,6 +56,11 @@ export const sidebarItems: NavGroup[] = [
         title: "shiftTypes",
         url: "/dashboard/shift-types",
         icon: Clock,
+      },
+      {
+        title: "jobTitles",
+        url: "/dashboard/job-titles",
+        icon: BadgeCheck,
       },
     ],
   },

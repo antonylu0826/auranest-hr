@@ -18,6 +18,7 @@ export const createEmployeeSchema = z.object({
   userId: z.string().cuid().nullable().optional(),
   orgUnitId: z.string().cuid().nullable().optional(),
   shiftTypeId: z.string().cuid().nullable().optional(),
+  jobTitleId: z.string().cuid().nullable().optional(),
   nationalId: z.string().nullable().optional(),
   gender: z.enum(GENDERS).nullable().optional(),
   birthDate: dateField,

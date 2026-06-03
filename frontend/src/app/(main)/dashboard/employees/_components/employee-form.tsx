@@ -19,6 +19,7 @@ import {
 import type { Employee, CreateEmployeeData } from "@/lib/employees-api";
 import { orgUnitsApi } from "@/lib/org-units-api";
 import { shiftTypesApi } from "@/lib/shift-types-api";
+import { jobTitlesApi } from "@/lib/job-titles-api";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -38,6 +39,7 @@ const schema = z.object({
   employmentStatus: z.enum(["ACTIVE", "RESIGNED", "TERMINATED", "ON_LEAVE"]).optional(),
   orgUnitId: z.string().nullable().optional(),
   shiftTypeId: z.string().nullable().optional(),
+  jobTitleId: z.string().nullable().optional(),
 });
 
 export type EmployeeFormValues = z.infer<typeof schema>;
@@ -77,6 +79,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
   const t = useTranslations("employees");
   const tOrg = useTranslations("orgUnits");
   const tShift = useTranslations("shiftTypes");
+  const tJob = useTranslations("jobTitles");
 
   const { data: orgUnits } = useQuery({
     queryKey: ["org-units", "list-all"],
@@ -86,6 +89,11 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
   const { data: shiftTypes } = useQuery({
     queryKey: ["shift-types", "list-all"],
     queryFn: () => shiftTypesApi.list({ limit: 100 }),
+  });
+
+  const { data: jobTitles } = useQuery({
+    queryKey: ["job-titles", "list-all"],
+    queryFn: () => jobTitlesApi.list({ limit: 100 }),
   });
 
   const {
@@ -124,6 +132,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         employmentStatus: defaultValues.employmentStatus,
         orgUnitId: defaultValues.orgUnitId ?? null,
         shiftTypeId: defaultValues.shiftTypeId ?? null,
+        jobTitleId: defaultValues.jobTitleId ?? null,
       });
     }
   }, [defaultValues, reset]);
@@ -213,6 +222,21 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
                 <SelectItem value="__none__">—</SelectItem>
                 {(shiftTypes?.data ?? []).filter((s) => s.isActive).map((s) => (
                   <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label={tJob("title")}>
+            <Select
+              value={watch("jobTitleId") ?? "__none__"}
+              onValueChange={(v) => setValue("jobTitleId", v === "__none__" ? null : v)}
+              disabled={disabled}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">—</SelectItem>
+                {(jobTitles?.data ?? []).filter((j) => j.isActive).map((j) => (
+                  <SelectItem key={j.id} value={j.id}>{j.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

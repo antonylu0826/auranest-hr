@@ -37,6 +37,7 @@
     "employees": "Employees",
     "orgUnits": "Org Units",
     "shiftTypes": "Shift Types",
+    "jobTitles": "Job Titles",
     "admin": "Admin",
     "users": "Users"
   },
@@ -52,6 +53,8 @@
     "org-units": "Org Units",
     "shiftTypes": "Shift Types",
     "shift-types": "Shift Types",
+    "jobTitles": "Job Titles",
+    "job-titles": "Job Titles",
     "users": "Users",
     "new": "New",
     "edit": "Edit"
@@ -107,6 +110,21 @@
       "TERMINATED": "Terminated",
       "ON_LEAVE": "On leave"
     }
+  },
+  "jobTitles": {
+    "title": "Job Titles",
+    "newJobTitle": "New job title",
+    "createJobTitle": "Create job title",
+    "editJobTitle": "Edit job title",
+    "deleteJobTitle": "Delete job title",
+    "deleteConfirm": "This cannot be undone. Remove all employee assignments before deleting.",
+    "searchPlaceholder": "Search by name, code or department…",
+    "noJobTitles": "No job titles found.",
+    "name": "Title name",
+    "code": "Code",
+    "department": "Department / function",
+    "grade": "Grade",
+    "isActive": "Active"
   },
   "shiftTypes": {
     "title": "Shift Types",
