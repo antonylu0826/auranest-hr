@@ -36,6 +36,7 @@
     "hr": "Human Resources",
     "employees": "Employees",
     "orgUnits": "Org Units",
+    "shiftTypes": "Shift Types",
     "admin": "Admin",
     "users": "Users"
   },
@@ -48,6 +49,9 @@
     "dashboard": "Home",
     "employees": "Employees",
     "orgUnits": "Org Units",
+    "org-units": "Org Units",
+    "shiftTypes": "Shift Types",
+    "shift-types": "Shift Types",
     "users": "Users",
     "new": "New",
     "edit": "Edit"
@@ -102,6 +106,37 @@
       "RESIGNED": "Resigned",
       "TERMINATED": "Terminated",
       "ON_LEAVE": "On leave"
+    }
+  },
+  "shiftTypes": {
+    "title": "Shift Types",
+    "newShiftType": "New shift type",
+    "createShiftType": "Create shift type",
+    "editShiftType": "Edit shift type",
+    "deleteShiftType": "Delete shift type",
+    "deleteConfirm": "This cannot be undone. Remove all employee assignments before deleting.",
+    "searchPlaceholder": "Search by name or code…",
+    "noShiftTypes": "No shift types found.",
+    "name": "Name",
+    "code": "Code",
+    "category": "Category",
+    "workStart": "Work start",
+    "workEnd": "Work end",
+    "breakStart": "Break start",
+    "breakEnd": "Break end",
+    "observeHolidays": "Observe public holidays",
+    "flexEarliestStart": "Flex earliest start",
+    "flexLatestStart": "Flex latest start",
+    "workDaysInCycle": "Work days",
+    "restDaysInCycle": "Rest days",
+    "cycleAnchorDate": "Cycle anchor date",
+    "isActive": "Active",
+    "basicSettings": "Basic settings",
+    "fixedSettings": "Fixed shift settings",
+    "rotatingSettings": "Rotating shift settings",
+    "categories": {
+      "FIXED": "Fixed",
+      "ROTATING": "Rotating"
     }
   },
   "orgUnits": {

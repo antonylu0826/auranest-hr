@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import type { Employee, CreateEmployeeData } from "@/lib/employees-api";
 import { orgUnitsApi } from "@/lib/org-units-api";
+import { shiftTypesApi } from "@/lib/shift-types-api";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -36,6 +37,7 @@ const schema = z.object({
   employmentType: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "INTERN"]).optional(),
   employmentStatus: z.enum(["ACTIVE", "RESIGNED", "TERMINATED", "ON_LEAVE"]).optional(),
   orgUnitId: z.string().nullable().optional(),
+  shiftTypeId: z.string().nullable().optional(),
 });
 
 export type EmployeeFormValues = z.infer<typeof schema>;
@@ -74,10 +76,16 @@ function Field({
 export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Props) {
   const t = useTranslations("employees");
   const tOrg = useTranslations("orgUnits");
+  const tShift = useTranslations("shiftTypes");
 
   const { data: orgUnits } = useQuery({
     queryKey: ["org-units", "list-all"],
     queryFn: () => orgUnitsApi.list({ limit: 100 }),
+  });
+
+  const { data: shiftTypes } = useQuery({
+    queryKey: ["shift-types", "list-all"],
+    queryFn: () => shiftTypesApi.list({ limit: 100 }),
   });
 
   const {
@@ -115,6 +123,7 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
         employmentType: defaultValues.employmentType,
         employmentStatus: defaultValues.employmentStatus,
         orgUnitId: defaultValues.orgUnitId ?? null,
+        shiftTypeId: defaultValues.shiftTypeId ?? null,
       });
     }
   }, [defaultValues, reset]);
@@ -189,6 +198,21 @@ export function EmployeeForm({ formId, defaultValues, onSubmit, disabled }: Prop
                 <SelectItem value="__none__">—</SelectItem>
                 {(orgUnits?.data ?? []).map((u) => (
                   <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label={tShift("title")}>
+            <Select
+              value={watch("shiftTypeId") ?? "__none__"}
+              onValueChange={(v) => setValue("shiftTypeId", v === "__none__" ? null : v)}
+              disabled={disabled}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__none__">—</SelectItem>
+                {(shiftTypes?.data ?? []).filter((s) => s.isActive).map((s) => (
+                  <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

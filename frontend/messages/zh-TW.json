@@ -36,6 +36,7 @@
     "hr": "人力資源",
     "employees": "員工管理",
     "orgUnits": "組織部門",
+    "shiftTypes": "班別設定",
     "admin": "管理",
     "users": "使用者"
   },
@@ -48,6 +49,9 @@
     "dashboard": "首頁",
     "employees": "員工管理",
     "orgUnits": "組織部門",
+    "org-units": "組織部門",
+    "shiftTypes": "班別設定",
+    "shift-types": "班別設定",
     "users": "使用者",
     "new": "新增",
     "edit": "編輯"
@@ -102,6 +106,37 @@
       "RESIGNED": "離職",
       "TERMINATED": "終止",
       "ON_LEAVE": "留職停薪"
+    }
+  },
+  "shiftTypes": {
+    "title": "班別設定",
+    "newShiftType": "新增班別",
+    "createShiftType": "建立班別",
+    "editShiftType": "編輯班別",
+    "deleteShiftType": "刪除班別",
+    "deleteConfirm": "這個操作無法復原。請先移除員工的班別指派後再刪除。",
+    "searchPlaceholder": "搜尋班別名稱或代碼…",
+    "noShiftTypes": "找不到班別資料。",
+    "name": "班別名稱",
+    "code": "代碼",
+    "category": "班別類型",
+    "workStart": "上班時間",
+    "workEnd": "下班時間",
+    "breakStart": "休息開始",
+    "breakEnd": "休息結束",
+    "observeHolidays": "遵守國定假日",
+    "flexEarliestStart": "最早上班時間",
+    "flexLatestStart": "最晚上班時間",
+    "workDaysInCycle": "工作天數",
+    "restDaysInCycle": "休息天數",
+    "cycleAnchorDate": "週期起算日",
+    "isActive": "啟用",
+    "basicSettings": "基本設定",
+    "fixedSettings": "固定班設定",
+    "rotatingSettings": "輪班設定",
+    "categories": {
+      "FIXED": "固定班",
+      "ROTATING": "輪班"
     }
   },
   "orgUnits": {

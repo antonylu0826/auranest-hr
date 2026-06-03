@@ -4,9 +4,10 @@ import { EmployeesModule } from './employees/employees.module';
 import { HealthModule } from './health/health.module';
 import { OrgUnitsModule } from './org-units/org-units.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ShiftTypesModule } from './shift-types/shift-types.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, HealthModule, UsersModule, EmployeesModule, OrgUnitsModule],
+  imports: [PrismaModule, AuthModule, HealthModule, UsersModule, EmployeesModule, OrgUnitsModule, ShiftTypesModule],
 })
 export class AppModule {}

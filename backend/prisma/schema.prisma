@@ -32,6 +32,11 @@ enum EmploymentStatus {
   ON_LEAVE
 }
 
+enum ShiftCategory {
+  FIXED
+  ROTATING
+}
+
 enum OrgUnitLevel {
   COMPANY
   DIVISION
@@ -52,6 +57,29 @@ model User {
   employeeProfile EmployeeProfile?
 
   @@map("users")
+}
+
+model ShiftType {
+  id                String        @id @default(cuid())
+  name              String        @unique
+  code              String        @unique
+  category          ShiftCategory @default(FIXED)
+  workStart         String?       @map("work_start")
+  workEnd           String?       @map("work_end")
+  breakStart        String?       @map("break_start")
+  breakEnd          String?       @map("break_end")
+  observeHolidays   Boolean       @default(true) @map("observe_holidays")
+  flexEarliestStart String?       @map("flex_earliest_start")
+  flexLatestStart   String?       @map("flex_latest_start")
+  workDaysInCycle   Int?          @map("work_days_in_cycle")
+  restDaysInCycle   Int?          @map("rest_days_in_cycle")
+  cycleAnchorDate   DateTime?     @map("cycle_anchor_date")
+  isActive          Boolean       @default(true) @map("is_active")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  employees         EmployeeProfile[]
+
+  @@map("shift_types")
 }
 
 model OrgUnit {
@@ -79,6 +107,8 @@ model EmployeeProfile {
   user                  User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
   orgUnitId             String?          @map("org_unit_id")
   orgUnit               OrgUnit?         @relation("OrgUnitMembers", fields: [orgUnitId], references: [id], onDelete: SetNull)
+  shiftTypeId           String?          @map("shift_type_id")
+  shiftType             ShiftType?       @relation(fields: [shiftTypeId], references: [id], onDelete: SetNull)
   ledOrgUnits           OrgUnit[]        @relation("OrgUnitHead")
   nationalId            String?          @map("national_id")
   gender                Gender?
