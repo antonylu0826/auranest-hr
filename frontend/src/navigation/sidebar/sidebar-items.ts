@@ -1,4 +1,4 @@
-import { type LucideIcon, Home, Users, UserCheck, Network, Clock, BadgeCheck } from "lucide-react";
+import { type LucideIcon, Home, Users, UserCheck, Network, Clock, BadgeCheck, Heart } from "lucide-react";
 
 export interface NavSubItem {
   title: string;
@@ -46,6 +46,11 @@ export const sidebarItems: NavGroup[] = [
         title: "employees",
         url: "/dashboard/employees",
         icon: UserCheck,
+      },
+      {
+        title: "employeeDependents",
+        url: "/dashboard/employee-dependents",
+        icon: Heart,
       },
       {
         title: "orgUnits",

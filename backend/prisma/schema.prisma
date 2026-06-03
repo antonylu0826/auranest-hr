@@ -156,6 +156,20 @@ model OrgUnit {
   @@map("org_units")
 }
 
+/// Family relationship of a dependent to an employee.
+enum DependentRelationship {
+  /// Legally married partner.
+  SPOUSE
+  /// Biological or adopted child.
+  CHILD
+  /// Biological or adoptive parent.
+  PARENT
+  /// Brother or sister.
+  SIBLING
+  /// Any other relationship not listed above.
+  OTHER
+}
+
 /// Core HR record for every person employed by the organisation.
 /// May exist before a system User account is created (userId is optional).
 model EmployeeProfile {
@@ -196,8 +210,34 @@ model EmployeeProfile {
   createdAt             DateTime         @default(now()) @map("created_at")
   updatedAt             DateTime         @updatedAt @map("updated_at")
 
+  dependents            EmployeeDependent[]
+
   @@index([employeeNumber])
   @@index([employmentStatus])
   @@index([orgUnitId])
   @@map("employee_profiles")
+}
+
+/// A family member or dependent registered under an employee's HR record.
+model EmployeeDependent {
+  id           String                @id @default(cuid())
+  /// FK to the owning employee profile.
+  employeeId   String                @map("employee_id")
+  employee     EmployeeProfile       @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  /// Full legal name of the dependent.
+  name         String
+  relationship DependentRelationship
+  gender       Gender?
+  /// Date of birth in YYYY-MM-DD (date-only, no timezone).
+  birthDate    DateTime?             @map("birth_date") @db.Date
+  /// National identification number; optional.
+  nationalId   String?               @map("national_id")
+  phone        String?
+  /// Inactive records are hidden from normal views but retained for history.
+  isActive     Boolean               @default(true) @map("is_active")
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime              @updatedAt @map("updated_at")
+
+  @@index([employeeId])
+  @@map("employee_dependents")
 }

@@ -35,6 +35,7 @@
     "home": "Home",
     "hr": "Human Resources",
     "employees": "Employees",
+    "employeeDependents": "Dependents",
     "orgUnits": "Org Units",
     "shiftTypes": "Shift Types",
     "jobTitles": "Job Titles",
@@ -49,6 +50,8 @@
   "pages": {
     "dashboard": "Home",
     "employees": "Employees",
+    "employeeDependents": "Dependents",
+    "employee-dependents": "Dependents",
     "orgUnits": "Org Units",
     "org-units": "Org Units",
     "shiftTypes": "Shift Types",
@@ -179,6 +182,38 @@
       "DIVISION": "Division",
       "DEPARTMENT": "Department",
       "TEAM": "Team"
+    }
+  },
+  "employeeDependents": {
+    "title": "Employee Dependents",
+    "newDependent": "New dependent",
+    "createDependent": "Create dependent",
+    "editDependent": "Edit dependent",
+    "deleteDependent": "Delete dependent",
+    "deleteConfirm": "This action cannot be undone. The dependent record will be permanently deleted.",
+    "searchPlaceholder": "Search name, employee or phone…",
+    "noDependents": "No dependents found.",
+    "employee": "Employee",
+    "employeeFilter": "Filter by employee",
+    "allEmployees": "All employees",
+    "name": "Name",
+    "relationship": "Relationship",
+    "gender": "Gender",
+    "birthDate": "Birth date",
+    "nationalId": "National ID",
+    "phone": "Phone",
+    "isActive": "Active",
+    "relationships": {
+      "SPOUSE": "Spouse",
+      "CHILD": "Child",
+      "PARENT": "Parent",
+      "SIBLING": "Sibling",
+      "OTHER": "Other"
+    },
+    "genders": {
+      "MALE": "Male",
+      "FEMALE": "Female",
+      "OTHER": "Other"
     }
   },
   "users": {

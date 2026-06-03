@@ -35,6 +35,7 @@
     "home": "首頁",
     "hr": "人力資源",
     "employees": "員工管理",
+    "employeeDependents": "員工眷屬",
     "orgUnits": "組織部門",
     "shiftTypes": "班別設定",
     "jobTitles": "職稱管理",
@@ -49,6 +50,8 @@
   "pages": {
     "dashboard": "首頁",
     "employees": "員工管理",
+    "employeeDependents": "員工眷屬",
+    "employee-dependents": "員工眷屬",
     "orgUnits": "組織部門",
     "org-units": "組織部門",
     "shiftTypes": "班別設定",
@@ -185,6 +188,38 @@
       "DIVISION": "secondary",
       "DEPARTMENT": "outline",
       "TEAM": "outline"
+    }
+  },
+  "employeeDependents": {
+    "title": "員工眷屬",
+    "newDependent": "新增眷屬",
+    "createDependent": "建立眷屬",
+    "editDependent": "編輯眷屬",
+    "deleteDependent": "刪除眷屬",
+    "deleteConfirm": "這個操作無法復原，眷屬資料將被永久刪除。",
+    "searchPlaceholder": "搜尋姓名、員工姓名或電話…",
+    "noDependents": "找不到眷屬資料。",
+    "employee": "所屬員工",
+    "employeeFilter": "篩選員工",
+    "allEmployees": "全部員工",
+    "name": "姓名",
+    "relationship": "關係",
+    "gender": "性別",
+    "birthDate": "出生日期",
+    "nationalId": "身分證號",
+    "phone": "電話",
+    "isActive": "啟用",
+    "relationships": {
+      "SPOUSE": "配偶",
+      "CHILD": "子女",
+      "PARENT": "父母",
+      "SIBLING": "兄弟姊妹",
+      "OTHER": "其他"
+    },
+    "genders": {
+      "MALE": "男",
+      "FEMALE": "女",
+      "OTHER": "其他"
     }
   },
   "users": {

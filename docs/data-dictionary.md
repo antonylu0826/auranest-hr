@@ -68,6 +68,18 @@
 | `FIXED` |  |
 | `ROTATING` |  |
 
+### DependentRelationship
+
+> Family relationship of a dependent to an employee.
+
+| Value | Description |
+|-------|-------------|
+| `SPOUSE` | Legally married partner. |
+| `CHILD` | Biological or adopted child. |
+| `PARENT` | Biological or adoptive parent. |
+| `SIBLING` | Brother or sister. |
+| `OTHER` | Any other relationship not listed above. |
+
 ## Models
 
 ### JobTitle
@@ -172,5 +184,25 @@
 | `hireDate` | DateTime |  |  | Date the employee joined the company (YYYY-MM-DD). |
 | `employmentType` | EmploymentType | ✓ |  |  |
 | `employmentStatus` | EmploymentStatus | ✓ |  |  |
+| `createdAt` | DateTime | ✓ |  |  |
+| `updatedAt` | DateTime | ✓ |  |  |
+
+### EmployeeDependent
+
+> A family member or dependent registered under an employee's HR record.
+
+**DB table:** `employee_dependents`
+
+| Field | Type | Required | Unique | Description |
+|-------|------|----------|--------|-------------|
+| `id` | String | ✓ | ✓ |  |
+| `employeeId` | String | ✓ |  | FK to the owning employee profile. |
+| `name` | String | ✓ |  | Full legal name of the dependent. |
+| `relationship` | DependentRelationship | ✓ |  |  |
+| `gender` | Gender |  |  |  |
+| `birthDate` | DateTime |  |  | Date of birth in YYYY-MM-DD (date-only, no timezone). |
+| `nationalId` | String |  |  | National identification number; optional. |
+| `phone` | String |  |  |  |
+| `isActive` | Boolean | ✓ |  | Inactive records are hidden from normal views but retained for history. |
 | `createdAt` | DateTime | ✓ |  |  |
 | `updatedAt` | DateTime | ✓ |  |  |
