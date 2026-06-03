@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { TimePicker } from "@/components/ui/time-picker";
 import type { ShiftType, CreateShiftTypeData, ShiftCategory } from "@/lib/shift-types-api";
 
 const TIME_RE = /^\d{2}:\d{2}$/;
@@ -40,17 +41,16 @@ interface Props {
   disabled?: boolean;
 }
 
-function TimeField({ label, name, register, disabled }: {
+function TimeField({ label, value, onChange, disabled }: {
   label: string;
-  name: keyof ShiftTypeFormValues;
-  // biome-ignore lint/suspicious/noExplicitAny: RHF register typing
-  register: any;
+  value?: string | null;
+  onChange: (v: string | undefined) => void;
   disabled?: boolean;
 }) {
   return (
     <div className="space-y-1.5">
       <Label className="text-sm">{label}</Label>
-      <Input type="time" {...register(name)} disabled={disabled} className="tabular-nums" />
+      <TimePicker value={value ?? undefined} onChange={onChange} placeholder={label} disabled={disabled} />
     </div>
   );
 }
@@ -121,10 +121,10 @@ export function ShiftTypeForm({ formId, defaultValues, onSubmit, disabled }: Pro
               </SelectContent>
             </Select>
           </div>
-          <TimeField label={t("workStart")} name="workStart" register={register} disabled={disabled} />
-          <TimeField label={t("workEnd")} name="workEnd" register={register} disabled={disabled} />
-          <TimeField label={t("breakStart")} name="breakStart" register={register} disabled={disabled} />
-          <TimeField label={t("breakEnd")} name="breakEnd" register={register} disabled={disabled} />
+          <TimeField label={t("workStart")} value={watch("workStart")} onChange={(v) => setValue("workStart", v ?? null)} disabled={disabled} />
+          <TimeField label={t("workEnd")} value={watch("workEnd")} onChange={(v) => setValue("workEnd", v ?? null)} disabled={disabled} />
+          <TimeField label={t("breakStart")} value={watch("breakStart")} onChange={(v) => setValue("breakStart", v ?? null)} disabled={disabled} />
+          <TimeField label={t("breakEnd")} value={watch("breakEnd")} onChange={(v) => setValue("breakEnd", v ?? null)} disabled={disabled} />
           <div className="flex items-center gap-2 pt-6">
             <Checkbox
               id="isActive"
@@ -144,8 +144,8 @@ export function ShiftTypeForm({ formId, defaultValues, onSubmit, disabled }: Pro
             {t("fixedSettings")} <Badge variant="secondary">FIXED</Badge>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <TimeField label={t("flexEarliestStart")} name="flexEarliestStart" register={register} disabled={disabled} />
-            <TimeField label={t("flexLatestStart")} name="flexLatestStart" register={register} disabled={disabled} />
+            <TimeField label={t("flexEarliestStart")} value={watch("flexEarliestStart")} onChange={(v) => setValue("flexEarliestStart", v ?? null)} disabled={disabled} />
+            <TimeField label={t("flexLatestStart")} value={watch("flexLatestStart")} onChange={(v) => setValue("flexLatestStart", v ?? null)} disabled={disabled} />
             <div className="flex items-center gap-2 pt-6">
               <Checkbox
                 id="observeHolidays"
