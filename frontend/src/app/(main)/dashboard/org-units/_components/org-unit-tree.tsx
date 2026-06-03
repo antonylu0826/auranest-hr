@@ -96,7 +96,7 @@ export function OrgUnitTree({ roots }: Props) {
   }
 
   return (
-    <div className="overflow-auto pb-8">
+    <div className="w-full overflow-auto pb-8">
       <div className="flex gap-12 justify-center min-w-max pt-4 px-8">
         {roots.map((root) => (
           <TreeNode key={root.id} node={root} isLast={false} />
