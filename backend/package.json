@@ -13,6 +13,7 @@
     "prisma:deploy": "dotenv -e ../.env -- prisma migrate deploy",
     "prisma:seed": "dotenv -e ../.env -- prisma db seed",
     "prisma:seed-demo": "dotenv -e ../.env -- ts-node prisma/seed-demo.ts",
+    "schema:docs": "dotenv -e ../.env -- ts-node scripts/gen-data-dictionary.ts",
     "prisma:studio": "dotenv -e ../.env -- prisma studio"
   },
   "prisma": {

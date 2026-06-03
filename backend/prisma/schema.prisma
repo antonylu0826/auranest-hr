@@ -7,17 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// System role controlling access level. ADMIN has full CRUD access; USER has read-only access.
 enum UserRole {
   ADMIN
   USER
 }
 
+/// Biological sex of an employee, used for demographic reporting.
 enum Gender {
   MALE
   FEMALE
   OTHER
 }
 
+/// Employee's contractual arrangement.
+/// FULL_TIME: standard 40-hour week; PART_TIME: reduced hours; CONTRACT: fixed-term; INTERN: internship.
 enum EmploymentType {
   FULL_TIME
   PART_TIME
@@ -25,6 +29,9 @@ enum EmploymentType {
   INTERN
 }
 
+/// Current employment lifecycle state.
+/// ACTIVE: currently employed; RESIGNED: voluntary separation by employee;
+/// TERMINATED: company-initiated separation; ON_LEAVE: unpaid leave with job guarantee.
 enum EmploymentStatus {
   ACTIVE
   RESIGNED
@@ -32,11 +39,8 @@ enum EmploymentStatus {
   ON_LEAVE
 }
 
-enum ShiftCategory {
-  FIXED
-  ROTATING
-}
-
+/// Hierarchical level of an organisational unit.
+/// COMPANY > DIVISION > DEPARTMENT > TEAM
 enum OrgUnitLevel {
   COMPANY
   DIVISION
@@ -44,13 +48,24 @@ enum OrgUnitLevel {
   TEAM
 }
 
-// Used only in local auth mode — ignored in OIDC mode
+/// Shift scheduling pattern.
+/// FIXED: same start/end time every workday; ROTATING: cyclical work/rest pattern (e.g. 4 on 2 off).
+enum ShiftCategory {
+  FIXED
+  ROTATING
+}
+
+/// System user account. Used for authentication in local-auth mode.
+/// Linked 1-to-1 with EmployeeProfile via userId (optional — an employee may exist before an account is created).
 model User {
   id              String           @id @default(cuid())
+  /// Login email, must be unique across the system.
   email           String           @unique
   password        String
+  /// Display name shown in UI; optional.
   name            String?
   role            UserRole         @default(USER)
+  /// Soft-disable without deleting — preserves audit history.
   isActive        Boolean          @default(true) @map("is_active")
   createdAt       DateTime         @default(now()) @map("created_at")
   updatedAt       DateTime         @updatedAt @map("updated_at")
@@ -59,21 +74,36 @@ model User {
   @@map("users")
 }
 
+/// Shift (work schedule) template defining working hours and cycle.
+/// Assigned to employees to determine their daily work pattern.
 model ShiftType {
   id                String        @id @default(cuid())
+  /// Human-readable name, e.g. "Morning Shift". Must be unique.
   name              String        @unique
+  /// Short uppercase identifier, e.g. "MORNING". Must be unique.
   code              String        @unique
   category          ShiftCategory @default(FIXED)
+  /// Scheduled work start time in HH:mm (24-hour). Null = flexible.
   workStart         String?       @map("work_start")
+  /// Scheduled work end time in HH:mm (24-hour). Null = flexible.
   workEnd           String?       @map("work_end")
+  /// Break period start in HH:mm. Null = no fixed break.
   breakStart        String?       @map("break_start")
+  /// Break period end in HH:mm.
   breakEnd          String?       @map("break_end")
+  /// FIXED only. Whether public holidays are automatically treated as rest days.
   observeHolidays   Boolean       @default(true) @map("observe_holidays")
+  /// FIXED only. Earliest allowed clock-in time for flex start (HH:mm).
   flexEarliestStart String?       @map("flex_earliest_start")
+  /// FIXED only. Latest allowed clock-in time for flex start (HH:mm).
   flexLatestStart   String?       @map("flex_latest_start")
+  /// ROTATING only. Number of consecutive workdays in one cycle, e.g. 4.
   workDaysInCycle   Int?          @map("work_days_in_cycle")
+  /// ROTATING only. Number of consecutive rest days in one cycle, e.g. 2.
   restDaysInCycle   Int?          @map("rest_days_in_cycle")
+  /// ROTATING only. Reference date to align the cycle phase for all employees.
   cycleAnchorDate   DateTime?     @map("cycle_anchor_date")
+  /// Inactive shifts are hidden from selection but retained for historical records.
   isActive          Boolean       @default(true) @map("is_active")
   createdAt         DateTime      @default(now()) @map("created_at")
   updatedAt         DateTime      @updatedAt @map("updated_at")
@@ -82,13 +112,18 @@ model ShiftType {
   @@map("shift_types")
 }
 
+/// Node in the company organisational hierarchy.
+/// Forms a tree via parent/children self-relation (unlimited depth).
 model OrgUnit {
   id        String       @id @default(cuid())
+  /// Display name of the unit, e.g. "Engineering Department".
   name      String
   level     OrgUnitLevel
+  /// Optional employee who leads this unit. FK to EmployeeProfile (nullable).
   headId    String?      @map("head_id")
-  parentId  String?      @map("parent_id")
   head      EmployeeProfile?  @relation("OrgUnitHead", fields: [headId], references: [id], onDelete: SetNull)
+  /// Parent unit in the hierarchy. Null = root node (typically the company itself).
+  parentId  String?      @map("parent_id")
   parent    OrgUnit?     @relation("OrgUnitTree", fields: [parentId], references: [id], onDelete: SetNull)
   children  OrgUnit[]    @relation("OrgUnitTree")
   employees EmployeeProfile[] @relation("OrgUnitMembers")
@@ -99,25 +134,37 @@ model OrgUnit {
   @@map("org_units")
 }
 
+/// Core HR record for every person employed by the organisation.
+/// May exist before a system User account is created (userId is optional).
 model EmployeeProfile {
   id                    String           @id @default(cuid())
+  /// Company-assigned employee ID, e.g. "EMP-001". Must be unique.
   employeeNumber        String           @unique @map("employee_number")
+  /// Full legal name.
   name                  String
+  /// Linked system account. Null until IT creates and links a User account.
   userId                String?          @unique @map("user_id")
   user                  User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /// Assigned organisational unit. Null if unassigned.
   orgUnitId             String?          @map("org_unit_id")
   orgUnit               OrgUnit?         @relation("OrgUnitMembers", fields: [orgUnitId], references: [id], onDelete: SetNull)
+  ledOrgUnits           OrgUnit[]        @relation("OrgUnitHead")
+  /// Assigned shift template. Determines daily work schedule.
   shiftTypeId           String?          @map("shift_type_id")
   shiftType             ShiftType?       @relation(fields: [shiftTypeId], references: [id], onDelete: SetNull)
-  ledOrgUnits           OrgUnit[]        @relation("OrgUnitHead")
+  /// Government-issued national identification number.
   nationalId            String?          @map("national_id")
   gender                Gender?
+  /// Date of birth in YYYY-MM-DD (stored as date-only, no timezone).
   birthDate             DateTime?        @map("birth_date") @db.Date
+  /// ISO 3166-1 alpha-2 country code, default "TW".
   nationality           String?          @default("TW")
   phone                 String?
   address               String?
+  /// Name of the person to contact in an emergency.
   emergencyContactName  String?          @map("emergency_contact_name")
   emergencyContactPhone String?          @map("emergency_contact_phone")
+  /// Date the employee joined the company (YYYY-MM-DD).
   hireDate              DateTime?        @map("hire_date") @db.Date
   employmentType        EmploymentType   @default(FULL_TIME) @map("employment_type")
   employmentStatus      EmploymentStatus @default(ACTIVE) @map("employment_status")
