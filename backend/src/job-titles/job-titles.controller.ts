@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { JwtOrApiKeyGuard } from '../auth/guards/jwt-or-api-key.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
@@ -9,7 +9,7 @@ import { createJobTitleSchema, updateJobTitleSchema, type CreateJobTitleInput, t
 import { JobTitlesService } from './job-titles.service';
 
 @Controller('job-titles')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtOrApiKeyGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
 export class JobTitlesController {
   constructor(private readonly jobTitles: JobTitlesService) {}

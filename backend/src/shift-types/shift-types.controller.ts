@@ -3,7 +3,7 @@ import {
   Param, Patch, Post, Query, UseGuards,
 } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { JwtOrApiKeyGuard } from '../auth/guards/jwt-or-api-key.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
@@ -12,7 +12,7 @@ import { createShiftTypeSchema, updateShiftTypeSchema, type CreateShiftTypeInput
 import { ShiftTypesService } from './shift-types.service';
 
 @Controller('shift-types')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtOrApiKeyGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
 export class ShiftTypesController {
   constructor(private readonly shiftTypes: ShiftTypesService) {}

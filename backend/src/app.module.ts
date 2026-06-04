@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ApiKeysModule } from './api-keys/api-keys.module';
 import { AuthModule } from './auth/auth.module';
 import { EmployeeDependentsModule } from './employee-dependents/employee-dependents.module';
 import { EmployeesModule } from './employees/employees.module';
@@ -11,6 +12,6 @@ import { ShiftTypesModule } from './shift-types/shift-types.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, HealthModule, UsersModule, EmployeesModule, EmployeeDependentsModule, OrgUnitsModule, ShiftTypesModule, JobTitlesModule, MetaModule],
+  imports: [PrismaModule, AuthModule, HealthModule, UsersModule, EmployeesModule, EmployeeDependentsModule, OrgUnitsModule, ShiftTypesModule, JobTitlesModule, MetaModule, ApiKeysModule],
 })
 export class AppModule {}
