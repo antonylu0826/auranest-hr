@@ -131,7 +131,7 @@ export function DependentDialog({ mode, dependent, defaultEmployeeId }: Props) {
       )}
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent aria-describedby={undefined} className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>{mode === "create" ? t("createDependent") : t("editDependent")}</DialogTitle>
           </DialogHeader>

@@ -84,7 +84,7 @@ export function JobTitleDialog({ mode, jobTitle }: Props) {
       )}
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent aria-describedby={undefined} className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{mode === "create" ? t("createJobTitle") : t("editJobTitle")}</DialogTitle>
           </DialogHeader>
