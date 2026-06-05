@@ -42,7 +42,8 @@
     "jobTitles": "Job Titles",
     "admin": "Admin",
     "users": "Users",
-    "apiKeys": "API Keys"
+    "apiKeys": "API Keys",
+    "roles": "Roles"
   },
   "welcome": {
     "greeting": "Welcome back",
@@ -64,7 +65,8 @@
     "apiKeys": "API Keys",
     "api-keys": "API Keys",
     "new": "New",
-    "edit": "Edit"
+    "edit": "Edit",
+    "roles": "Roles"
   },
   "employees": {
     "title": "Employees",
@@ -274,6 +276,71 @@
     "actions": {
       "revoke": "Revoke",
       "revokeConfirm": "Are you sure you want to revoke this key? This action cannot be undone."
+    }
+  },
+  "roles": {
+    "title": "Roles",
+    "newRole": "New role",
+    "searchPlaceholder": "Search roles…",
+    "noRoles": "No roles found.",
+    "name": "Role code",
+    "namePlaceholder": "e.g. EDITOR",
+    "nameHint": "Uppercase letters, digits and underscores only",
+    "displayName": "Display name",
+    "displayNamePlaceholder": "e.g. Editor",
+    "permissionPolicy": "Default access policy",
+    "permissions": "Explicit permissions",
+    "userCount": "Users",
+    "apiKeyCount": "API keys",
+    "system": "System role",
+    "editRole": "Edit role",
+    "deleteRole": "Delete role",
+    "deleteConfirm": "This action cannot be undone. The role will be permanently deleted.",
+    "cannotDeleteSystem": "System roles cannot be deleted.",
+    "cannotDeleteHasUsers": "This role is still assigned to users or API keys. Remove them first.",
+    "allowAllNote": "This role uses the Allow All policy. Explicit permissions have no effect.",
+    "policy": {
+      "DENY_ALL": "Deny all (default)",
+      "READ_ALL": "Allow reads",
+      "ALLOW_ALL": "Allow all"
+    },
+    "groups": {
+      "users": "Users",
+      "apiKeys": "API Keys",
+      "hrEmployee": "Employees",
+      "hrOrg": "Org Units",
+      "hrShift": "Shift Types",
+      "hrJob": "Job Titles",
+      "hrDependent": "Employee Dependents"
+    },
+    "perm": {
+      "USERS_READ": "Read Users",
+      "USERS_CREATE": "Create Users",
+      "USERS_UPDATE": "Update Users",
+      "USERS_DELETE": "Delete Users",
+      "API_KEYS_READ": "Read API Keys",
+      "API_KEYS_CREATE": "Create API Keys",
+      "API_KEYS_DELETE": "Delete API Keys",
+      "HR_EMPLOYEE_READ": "Read Employees",
+      "HR_EMPLOYEE_CREATE": "Create Employees",
+      "HR_EMPLOYEE_UPDATE": "Update Employees",
+      "HR_EMPLOYEE_DELETE": "Delete Employees",
+      "HR_ORG_READ": "Read Org Units",
+      "HR_ORG_CREATE": "Create Org Units",
+      "HR_ORG_UPDATE": "Update Org Units",
+      "HR_ORG_DELETE": "Delete Org Units",
+      "HR_SHIFT_READ": "Read Shift Types",
+      "HR_SHIFT_CREATE": "Create Shift Types",
+      "HR_SHIFT_UPDATE": "Update Shift Types",
+      "HR_SHIFT_DELETE": "Delete Shift Types",
+      "HR_JOB_READ": "Read Job Titles",
+      "HR_JOB_CREATE": "Create Job Titles",
+      "HR_JOB_UPDATE": "Update Job Titles",
+      "HR_JOB_DELETE": "Delete Job Titles",
+      "HR_DEPENDENT_READ": "Read Dependents",
+      "HR_DEPENDENT_CREATE": "Create Dependents",
+      "HR_DEPENDENT_UPDATE": "Update Dependents",
+      "HR_DEPENDENT_DELETE": "Delete Dependents"
     }
   }
 }

@@ -42,7 +42,8 @@
     "jobTitles": "職稱管理",
     "admin": "管理",
     "users": "使用者",
-    "apiKeys": "API 金鑰"
+    "apiKeys": "API 金鑰",
+    "roles": "角色管理"
   },
   "welcome": {
     "greeting": "歡迎回來",
@@ -64,7 +65,8 @@
     "apiKeys": "API 金鑰",
     "api-keys": "API 金鑰",
     "new": "新增",
-    "edit": "編輯"
+    "edit": "編輯",
+    "roles": "角色管理"
   },
   "employees": {
     "title": "員工管理",
@@ -280,6 +282,71 @@
     "actions": {
       "revoke": "撤銷",
       "revokeConfirm": "確定要撤銷此金鑰？此操作無法復原。"
+    }
+  },
+  "roles": {
+    "title": "角色管理",
+    "newRole": "新增角色",
+    "searchPlaceholder": "搜尋角色名稱…",
+    "noRoles": "找不到角色。",
+    "name": "角色代碼",
+    "namePlaceholder": "例如：EDITOR",
+    "nameHint": "只允許大寫英文字母、數字及底線",
+    "displayName": "顯示名稱",
+    "displayNamePlaceholder": "例如：編輯者",
+    "permissionPolicy": "預設存取政策",
+    "permissions": "明細權限",
+    "userCount": "使用者數",
+    "apiKeyCount": "API 金鑰數",
+    "system": "系統角色",
+    "editRole": "編輯角色",
+    "deleteRole": "刪除角色",
+    "deleteConfirm": "此操作無法復原，角色將被永久刪除。",
+    "cannotDeleteSystem": "系統角色無法刪除。",
+    "cannotDeleteHasUsers": "角色仍有使用者或 API 金鑰指派，請先移除後再刪除。",
+    "allowAllNote": "此角色採用「允許全部」政策，明細設定不生效。",
+    "policy": {
+      "DENY_ALL": "拒絕（預設）",
+      "READ_ALL": "允許讀取",
+      "ALLOW_ALL": "允許全部"
+    },
+    "groups": {
+      "users": "用戶",
+      "apiKeys": "API 金鑰",
+      "hrEmployee": "員工",
+      "hrOrg": "組織架構",
+      "hrShift": "班次類型",
+      "hrJob": "職稱",
+      "hrDependent": "員工眷屬"
+    },
+    "perm": {
+      "USERS_READ": "讀取用戶",
+      "USERS_CREATE": "建立用戶",
+      "USERS_UPDATE": "更新用戶",
+      "USERS_DELETE": "刪除用戶",
+      "API_KEYS_READ": "讀取 API 金鑰",
+      "API_KEYS_CREATE": "建立 API 金鑰",
+      "API_KEYS_DELETE": "刪除 API 金鑰",
+      "HR_EMPLOYEE_READ": "讀取員工",
+      "HR_EMPLOYEE_CREATE": "新增員工",
+      "HR_EMPLOYEE_UPDATE": "更新員工",
+      "HR_EMPLOYEE_DELETE": "刪除員工",
+      "HR_ORG_READ": "讀取組織架構",
+      "HR_ORG_CREATE": "新增組織架構",
+      "HR_ORG_UPDATE": "更新組織架構",
+      "HR_ORG_DELETE": "刪除組織架構",
+      "HR_SHIFT_READ": "讀取班次類型",
+      "HR_SHIFT_CREATE": "新增班次類型",
+      "HR_SHIFT_UPDATE": "更新班次類型",
+      "HR_SHIFT_DELETE": "刪除班次類型",
+      "HR_JOB_READ": "讀取職稱",
+      "HR_JOB_CREATE": "新增職稱",
+      "HR_JOB_UPDATE": "更新職稱",
+      "HR_JOB_DELETE": "刪除職稱",
+      "HR_DEPENDENT_READ": "讀取員工眷屬",
+      "HR_DEPENDENT_CREATE": "新增員工眷屬",
+      "HR_DEPENDENT_UPDATE": "更新員工眷屬",
+      "HR_DEPENDENT_DELETE": "刪除員工眷屬"
     }
   }
 }

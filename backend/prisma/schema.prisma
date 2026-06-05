@@ -7,10 +7,86 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// System role controlling access level. ADMIN has full CRUD access; USER has read-only access.
-enum UserRole {
-  ADMIN
-  USER
+/// Per-role baseline access policy evaluated before explicit permission grants.
+/// DENY_ALL = no access unless explicitly granted; READ_ALL = all *_READ auto-pass;
+/// ALLOW_ALL = bypass permission checks (use for power roles).
+enum PermissionPolicy {
+  DENY_ALL
+  READ_ALL
+  ALLOW_ALL
+}
+
+/// Fine-grained permission tokens attached to Role records.
+/// Base set: USERS_* / API_KEYS_* (shared by all apps).
+/// HR set: HR_EMPLOYEE_* / HR_ORG_* / HR_SHIFT_* / HR_JOB_* / HR_DEPENDENT_*.
+enum Permission {
+  // ── Base permissions ───────────────────────────────────
+  USERS_READ
+  USERS_CREATE
+  USERS_UPDATE
+  USERS_DELETE
+  API_KEYS_READ
+  API_KEYS_CREATE
+  API_KEYS_DELETE
+  // ── HR: Employees ─────────────────────────────────────
+  HR_EMPLOYEE_READ
+  HR_EMPLOYEE_CREATE
+  HR_EMPLOYEE_UPDATE
+  HR_EMPLOYEE_DELETE
+  // ── HR: Org Units ─────────────────────────────────────
+  HR_ORG_READ
+  HR_ORG_CREATE
+  HR_ORG_UPDATE
+  HR_ORG_DELETE
+  // ── HR: Shift Types ───────────────────────────────────
+  HR_SHIFT_READ
+  HR_SHIFT_CREATE
+  HR_SHIFT_UPDATE
+  HR_SHIFT_DELETE
+  // ── HR: Job Titles ────────────────────────────────────
+  HR_JOB_READ
+  HR_JOB_CREATE
+  HR_JOB_UPDATE
+  HR_JOB_DELETE
+  // ── HR: Employee Dependents ───────────────────────────
+  HR_DEPENDENT_READ
+  HR_DEPENDENT_CREATE
+  HR_DEPENDENT_UPDATE
+  HR_DEPENDENT_DELETE
+}
+
+/// Named access role assignable to users and API keys. ADMIN and USER are system-locked.
+/// @internal
+model Role {
+  id               String           @id @default(cuid())
+  /// Unique machine name, e.g. "ADMIN", "USER", "HR_MANAGER".
+  name             String           @unique
+  /// Human-readable label shown in UI.
+  displayName      String           @map("display_name")
+  permissionPolicy PermissionPolicy @default(DENY_ALL) @map("permission_policy")
+  /// System roles (ADMIN/USER) cannot be deleted.
+  isSystem         Boolean          @default(false) @map("is_system")
+  /// Assigned automatically to new users when no role is specified.
+  isDefault        Boolean          @default(false) @map("is_default")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  permissions      RolePermission[]
+  users            User[]
+  apiKeys          ApiKey[]
+
+  @@map("roles")
+}
+
+/// Join table between Role and Permission enum values. @internal
+model RolePermission {
+  id         String     @id @default(cuid())
+  roleId     String     @map("role_id")
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  @@unique([roleId, permission])
+  @@map("role_permissions")
 }
 
 /// Biological sex of an employee, used for demographic reporting.
@@ -88,7 +164,8 @@ model ApiKey {
   /// SHA-256 hash of the raw key. The raw key is never persisted.
   hashedKey  String    @unique @map("hashed_key")
   /// Role this key authenticates as when calling the API.
-  role       UserRole  @default(USER)
+  roleId     String    @map("role_id")
+  role       Role      @relation(fields: [roleId], references: [id])
   /// Module-level scopes, e.g. ["users:read","employees:*"]. "*" = all scopes. Empty = deny all.
   scopes     String[]
   /// Requests per minute. null = system default (60).
@@ -116,7 +193,8 @@ model User {
   password        String
   /// Display name shown in UI; optional.
   name            String?
-  role            UserRole         @default(USER)
+  roleId          String           @map("role_id")
+  role            Role             @relation(fields: [roleId], references: [id])
   /// Soft-disable without deleting — preserves audit history.
   isActive        Boolean          @default(true) @map("is_active")
   createdAt       DateTime         @default(now()) @map("created_at")

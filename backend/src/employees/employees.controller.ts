@@ -10,10 +10,10 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
+import { Permission } from '@prisma/client';
 import { JwtOrApiKeyGuard } from '../auth/guards/jwt-or-api-key.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { RequirePermissions } from '../auth/decorators/require-permissions.decorator';
+import { PermissionGuard } from '../auth/guards/permission.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import {
   paginationQuerySchema,
@@ -33,12 +33,12 @@ const listQuerySchema = paginationQuerySchema.extend({
 });
 
 @Controller('employees')
-@UseGuards(JwtOrApiKeyGuard, RolesGuard)
-@Roles(UserRole.ADMIN)
+@UseGuards(JwtOrApiKeyGuard, PermissionGuard)
 export class EmployeesController {
   constructor(private readonly employees: EmployeesService) {}
 
   @Get()
+  @RequirePermissions(Permission.HR_EMPLOYEE_READ)
   findAll(
     @Query(new ZodValidationPipe(listQuerySchema))
     query: PaginationQuery & { status?: string },
@@ -47,11 +47,13 @@ export class EmployeesController {
   }
 
   @Get(':id')
+  @RequirePermissions(Permission.HR_EMPLOYEE_READ)
   findOne(@Param('id') id: string) {
     return this.employees.findOne(id);
   }
 
   @Post()
+  @RequirePermissions(Permission.HR_EMPLOYEE_CREATE)
   create(
     @Body(new ZodValidationPipe(createEmployeeSchema)) body: CreateEmployeeInput,
   ) {
@@ -59,6 +61,7 @@ export class EmployeesController {
   }
 
   @Patch(':id')
+  @RequirePermissions(Permission.HR_EMPLOYEE_UPDATE)
   update(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(updateEmployeeSchema)) body: UpdateEmployeeInput,
@@ -68,6 +71,7 @@ export class EmployeesController {
 
   @Delete(':id')
   @HttpCode(204)
+  @RequirePermissions(Permission.HR_EMPLOYEE_DELETE)
   remove(@Param('id') id: string) {
     return this.employees.remove(id);
   }
